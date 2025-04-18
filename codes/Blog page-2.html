@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog page-1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+          /* General Styles */
+          body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+    
+            /* Header Styles */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #004d40;
+                padding: 15px 20px;
+                color: white;
+            }
+    
+            /* Logo */
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+            }
+    
+            /* Navigation Styles */
+            nav ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+            }
+    
+            nav ul li {
+                margin: 0 15px;
+            }
+    
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+            }
+    
+            /* Actions (Cart, Login, Signup) */
+            .actions {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+    
+            .actions a {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 10px 15px;
+                background-color: white;
+                color: #004d40;
+                border: 2px solid #004d40;
+                border-radius: 25px;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: bold;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+    
+            .actions a:hover {
+                background-color: #004d40;
+                color: white;
+            }
+    
+            /* Icons */
+            .cart {
+                font-size: 18px;
+            }
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+            color: #333;
+        }
+        /* Blog Page Layout */
+        .blog-page {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        /* Blog Content */
+        .blog-content {
+            flex: 0 0 70%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-content h2 {
+            font-size: 2.0em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .post-date {
+            font-style: italic;
+            color: gray;
+            margin-bottom: 20px;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .post-description {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+         /* Sidebar Categories */
+         .categories {
+            flex: 1;
+            margin-left: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .categories h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .categories ul {
+            list-style: none;
+        }
+
+        .categories ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: backgroun 0.3s ease;
+        }
+
+        .categories ul li:last-child {
+            border-bottom: none;
+        }
+
+        .categories ul li:hover {
+            background: #f5f5f5;
+        }
+
+        .categories ul li a {
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .categories ul li .arrow {
+            color: #888;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .categories ul li:hover .arrow {
+            color: red;
+            transform: translateX(5px);
+        }
+        
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .blog-page {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .blog-content {
+                flex: 0 0 100%;
+                margin-bottom: 20px;
+            }
+
+            .sidebar {
+                flex: 0 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Easy Pharmacy</div>
+        <nav>
+          <ul>
+            <li><a href="medicine.html">Buy Medicines</a></li>
+            <li><a href="doctor page.html">Find Doctors</a></li>
+            <li><a href="lab test.html">Lab Tests</a></li>
+            <li><a href="health records.html">Health Records</a></li>
+            <li><a href="blog.html">Health Blog</a></li>
+          </ul>
+        </nav>
+        <div class="actions">
+          <a href="cart.html" class="cart">🛒</a>
+          <span id="userGreeting" style="color: white; font-weight: bold; margin-right: 10px;"></span>
+          <a href="sing up-1.html" id="loginBtn" class="login">Login <span>👤</span></a>
+          <img id="userProfileImage" src="" alt="Profile" style="display: none; width: 32px; height: 32px; border-radius: 50%;">
+          <button id="logoutBtn" style="display: none; padding: 8px 12px; border-radius: 20px; background: white; border: none; cursor: pointer; font-weight: bold;">Sign Out</button>
+        </div>
+      </header>
+      
+      <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      
+        const firebaseConfig = {
+          apiKey: "AIzaSyD1wxRNIiYZGxrfGNCjvM1jiNQn1OYSw5M",
+          authDomain: "easypharm-82073.firebaseapp.com",
+          projectId: "easypharm-82073",
+          storageBucket: "easypharm-82073.firebasestorage.app",
+          messagingSenderId: "756950425409",
+          appId: "1:756950425409:web:b91bbf6f3ed01f5eb04bc0",
+          measurementId: "G-283W9QNVJS"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+      
+        const userGreeting = document.getElementById("userGreeting");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+      
+        // Track last activity for session timeout
+        let logoutTimer;
+      
+        const startLogoutTimer = () => {
+          clearTimeout(logoutTimer);
+          logoutTimer = setTimeout(() => {
+            signOut(auth).then(() => {
+              alert("You have been logged out due to inactivity.");
+            });
+          }, 30 * 60 * 1000); // 30 minutes
+        };
+      
+        const resetTimerOnActivity = () => {
+          document.addEventListener("mousemove", startLogoutTimer);
+          document.addEventListener("keydown", startLogoutTimer);
+          document.addEventListener("click", startLogoutTimer);
+        };
+         
+        onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    const match = email.replace(/[^a-zA-Z].*$/, "");
+
+    userGreeting.textContent = `Hi, ${match}`;
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+
+    // 👇 New code for profile image
+    const profileImg = document.getElementById("userProfileImage");
+    if (user.photoURL) {
+      profileImg.src = user.photoURL;
+      profileImg.style.display = "inline-block";
+    }
+
+    startLogoutTimer();
+    resetTimerOnActivity();
+  } else {
+    userGreeting.textContent = "";
+    loginBtn.style.display = "flex";
+    logoutBtn.style.display = "none";
+
+    const profileImg = document.getElementById("userProfileImage");
+    profileImg.style.display = "none";
+    clearTimeout(logoutTimer);
+  }
+});
+        logoutBtn.addEventListener("click", () => {
+          signOut(auth);
+        });
+      </script>
+     
+    <main class="blog-page">
+        <section class="blog-content">
+            <h2>Natural Remedies for Common Cold</h2>
+            <p class="post-date">April 10, 2025</p>
+            <img src="bblog-2.jpg" alt="Blog Image" class="blog-image">
+            <p class="post-description">
+                Natural Remedies for Common Cold
+                by Easypharm Team, April 08, 2025
+                Whether it’s a runny nose, sore throat, or persistent cough, a common cold can be quite irritating. Trying to focus on our work with a stuffy nose, scratchy throat, and non-stop sneezing becomes challenging. Therefore, we wish to get rid of it as soon as the symptoms appear. Suffering from a common cold is quite common, and relying solely on medication to combat the illness is not the one-stop solution. Moreover, regular intake of antibiotics to treat the common cold can also lead to adverse effects in the long run. While there are several remedies for the common cold, it is best to take the natural route. Therefore, it is advisable to opt for natural remedies when treating the common cold. Let’s take a look at the natural remedies for the common cold that can help you deal with it.
+ <h2>Chicken Soup</h2>
+ Chicken soup might not be the ultimate treatment for the common cold, but it is a great choice when you suffer from the flu. Consuming a bowl of hot chicken soup with vegetables helps slow down the movement of neutrophils in the body. Neutrophils are a common type of white blood cells found in the human body. The slow movement of these neutrophils ensures they stay in a more concentrated form in your body, resulting in quick healing. Chicken soup has high nutritional value that keeps you well hydrated, thus acting as one of the foolproof remedies for the common cold. Moreover, chicken soup contains all the essential nutrients that help combat the flu-causing virus. 
+ <br><img src="https://blog.medplusmart.com/wp-content/uploads/2023/10/9.jpg">
+ <h2>Taking Zinc Tablets</h2>
+ The market is packed with several remedies for the common cold, and zinc is one of them. Zinc is a crucial mineral required by more than three hundred enzymes in the human body. Consuming zinc tablets within 24 hours of the onset of common cold symptoms helps reduce the flu duration. Regular consumption of zinc tablets helps reduce the severity of common cold symptoms. Zinc tablets block the cold virus from multiplying, thus preventing it from spreading. They also prevent the virus from permeating the throat and nose cells.
+ <h2>Getting Exposed to Humidity</h2>
+ One of the excellent remedies for the common cold that works magically in treating the common flu is getting enough exposure to humidity. The influenza virus thrives and multiplies in dry environments. Creating more humidity in your room will reduce exposure to the flu-causing virus. Increased humidity in the room also aids in reducing nasal inflammation, thus allowing you to breathe properly. For this purpose, you can consider getting a humidifier or a cool mist vaporizer. Adding a few drops of eucalyptus oil to the humidifier also aids in stimulating your breathing along with easing nasal congestion. Alternatively, you can also take a steamy shower that helps instantly relax the nasal passages.
+ <h2>Increasing the Intake of Vitamin C</h2>
+ Vitamin C plays an important role as one of the excellent remedies for the common cold. Limes, oranges, grapefruits, leafy vegetables, etc., are some of the major sources of vitamin C. Adding fresh lemon juice and honey to hot tea or warm water significantly reduces phlegm and treats a sore throat. You can also consider taking vitamin C tablets regularly. Vitamin C not only aids in treating colds but also boosts immunity. Regular vitamin C intake significantly reduces the risk of catching a cold, even when exposed to extremely cold temperatures. Additionally, getting sufficient vitamin C relieves upper respiratory tract infections. Therefore, if you are looking for some fast and effective remedies for the common cold,
+  then look no further and head straight to your fridge for a piece of lemon. 
+  <h2>Garlic</h2>
+  The most useful and effective remedies for the common cold are usually found in our kitchen. Garlic is one of the most common and widely used natural remedies for the common cold. Whether it’s in a bowl of chicken soup, a drink made with garlic, or just consuming raw garlic cloves, garlic is one of the best home remedies for the common cold. Garlic consists of a cold-fighting element known as allicin. It has excellent antifungal and antimicrobial properties that help treat the common cold. To maximize the amount and effect of allicin, you can crush or grind the garlic clove and then consume it in its raw form. Garlic also reduces the recovery time and increases the body’s capacity to fight against disease-causing germs.
+<h2>Summing Up</h2>
+Weather changes have become quite common these days, and so have the chances of catching a common cold. Moreover, our hectic lifestyle and dependence on fast foods have left us with a weak immune system, increasing our vulnerability to the common cold. Though several medicines and over-the-counter drugs are available at drug stores for treating the common cold, they often result in after-effects that usually appear in the long run. Therefore, opting for natural remedies for the common cold is considered a safe option. Natural remedies not only aid in reducing the symptoms of the common cold but also better prepare the body to fight against such germs in the future. Additionally, natural remedies for the common cold are available in our homes and kitchens, allowing us to easily access them at the onset of symptoms.
+<img src="https://blog.medplusmart.com/wp-content/uploads/2023/10/4.jpg">
+        </section>
+
+        <aside class="categories">
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="Must Haves product page.html">Must have</a> <span class="arrow">›</span></li>
+                <li><a href="sports nurition.html">Sports nurition</a> <span class="arrow">›</span></li>
+                <li><a href="health care page.html">Healthcare</a> <span class="arrow">›</span></li>
+                <li><a href="diabetic care.html">Diabetic care</a> <span class="arrow">›</span></li>
+                <li><a href="personal care.html">Personal Care</a> <span class="arrow">›</span></li>
+                <li><a href="mother page.html">Mother and baby care</a> <span class="arrow">›</span></li>
+            </ul>
+        </aside>
+    </main>
+ <!-- Footer Section -->
+ <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact us.html">Partner with Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Our Services</h4>
+            <ul>
+                <li><a href="medicine.html">Order Medicine</a></li>
+                <li><a href="health care page.html">Healthcare Products</a></li>
+                <li><a href="lab test.html">Lab Tests</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Featured Categories</h4>
+            <ul>
+                <li><a href="Must Haves product page.html">Must Haves</a></li>
+                <li><a href="health care page.html">Heart Care</a></li>
+                <li><a href="diabetic care.html">Diabetic Care</a></li>
+                <li><a href="sexuall wellness.html">Sexual Wellness</a></li>
+                <li><a href="sports nurition.html">Sports Nutrition</a></li>
+                <li><a href="Elderly Care.html">Elderly Care</a></li>
+                <li><a href="personal care.html">Personal Care</a></li>
+                <li><a href="Health Food and Drinks.html">Health Food and Drinks</a></li>
+                <li><a href="mother page.html">Mother and Baby Care</a></li>
+                <li><a href="vitamins page.html">Vitamins & Supplements</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Need Help</h4>
+            <ul>
+                <li><a href="medicine.html">Browse All Medicines</a></li>
+                <li><a href="doctor page.html">Browse All Doctors</a></li>
+                <li><a href="nearby pharmacy.html">Browse All Cities</a></li>
+                <li><a href="nearby pharmacy.html">Browse All Stores</a></li>
+                <li><a href="FQ'S.html">FAQs</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Policy Info</h4>
+            <ul>
+                <li><a href="privacy policy.html">Privacy Policy</a></li>
+                <li><a href="terms and conditions.html">Terms and Conditions</a></li>
+                <li><a href="contact us.html">Customer Support Policy</a></li>
+                <li><a href="privacy policy.html">Return Policy</a></li>
+            </ul>
+        </div>
+</footer>
+
+<!-- CSS Styles -->
+<style>
+
+    .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width:2000px;
+        margin: auto;
+        gap:30px;
+    }
+    .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin: 10px;
+    }
+    .footer-section h4 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+    .footer-section ul li {
+        margin-bottom: 8px;
+    }
+    .footer-section ul li a {
+        text-decoration: none;
+        color: #333;
+    }
+    .social-icons img, .payment-partners img {
+        width: 50px;
+        margin-right: 10px;
+    }
+    </style>
+   <!--Chat bot-->
+   <title>Pharmacy Chatbot</title>
+   <style>
+       body { font-family: Arial, sans-serif; }
+       .chatbot-container {
+           position: fixed;
+           bottom: 100px;
+           right: 20px;
+           width: 300px;
+           display: none;
+           border-radius: 10px;
+           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+           background: white;
+           overflow: hidden;
+       }
+       .chat-header {
+           background: #007bff;
+           color: white;
+           padding: 10px;
+           text-align: center;
+           font-weight: bold;
+       }
+       .chat-body {
+           height: 300px;
+           overflow-y: auto;
+           padding: 10px;
+       }
+       .chat-input {
+           display: flex;
+           border-top: 1px solid #ccc;
+       }
+       .chat-input input {
+           flex: 1;
+           padding: 10px;
+           border: none;
+           outline: none;
+       }
+       .chat-input button {
+           padding: 10px;
+           border: none;
+           background: #007bff;
+           color: white;
+           cursor: pointer;
+       }
+       .chat-toggle {
+           position: fixed;
+           bottom: 100px;
+           right: 90px;
+           background: transparent;
+           border: none;
+           cursor: pointer;
+       }
+       .chat-toggle img {
+           width: 60px;
+           height: 60px;
+           border-radius: 50%;
+       }
+   </style>
+</head>
+<body>
+   <button class="chat-toggle" onclick="toggleChat()">
+       <img src="chatbot img.png" alt="Chatbot">
+   </button>
+   <div class="chatbot-container" id="chatbot">
+       <div class="chat-header">Pharmacy Chatbot</div>
+       <div class="chat-body" id="chat-body"></div>
+       <div class="chat-input">
+           <input type="text" id="user-input" placeholder="Ask me anything...">
+           <button onclick="sendMessage()">Send</button>
+       </div>
+   </div>
+
+   <script>
+       function toggleChat() {
+           var chatbot = document.getElementById('chatbot');
+           chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+       }
+
+       function sendMessage() {
+           var inputField = document.getElementById('user-input');
+           var userText = inputField.value;
+           if (!userText.trim()) return;
+           
+           var chatBody = document.getElementById('chat-body');
+           chatBody.innerHTML += `<div><strong>You:</strong> ${userText}</div>`;
+           inputField.value = '';
+           setTimeout(() => respondToUser(userText.toLowerCase()), 1000);
+       }
+
+       function respondToUser(question) {
+           var responses = {
+               "hi": "Hello! This is Jira from Easy Pharmacy. How can I help you?",
+               "what are your pharmacy hours": "We are open from 9 AM to 9 PM every day.",
+               "do you deliver medicines": "Yes, we offer home delivery services.",
+               "how can i contact customer support": "You can call us at +91-1234567890.",
+               "do you have painkillers": "Yes, we have a variety of painkillers. Please consult a doctor before purchasing.",
+               "how can i book a doctor appointment": "You can book a doctor appointment through our website's appointment section.",
+               "do you offer lab tests": "Yes, we provide lab test services. You can schedule a test through our lab section.",
+               "what types of lab tests do you provide": "We offer blood tests, urine tests, and many other diagnostic services.",
+               "show the medicine page": "<a href='/medicine'>Click here to visit the medicine page</a>",
+               "show the blog page": "<a href='/blog'>Click here to visit the blog page</a>",
+               "take me to medicine page": "<a href='/medicine'>Click here to visit the medicine page</a>",
+               "take me to health blog page": "<a href='/blog'>Click here to visit the blog page</a>",
+               "can i book appointment with doctor": "Yes, you can book a slot with specialist doctors",
+               "can you help in ordering medicines": "Yes, sure. You can select the category of medicine and add it to the cart.Then you can proceed to payment"
+           };
+           var chatBody = document.getElementById('chat-body');
+           var response = responses[question] || "Sorry, I didn't understand. Please try another question.";
+           chatBody.innerHTML += `<div><strong>Bot:</strong> ${response}</div>`;
+       }
+   </script>
+</body>
+</html>
+
+
+
+

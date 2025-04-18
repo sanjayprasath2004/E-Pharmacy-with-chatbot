@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easypharm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+          /* General Styles */
+          body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+    
+            /* Header Styles */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #004d40;
+                padding: 15px 20px;
+                color: white;
+            }
+    
+            /* Logo */
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+            }
+    
+            /* Navigation Styles */
+            nav ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+            }
+    
+            nav ul li {
+                margin: 0 15px;
+            }
+    
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+            }
+    
+            /* Actions (Cart, Login, Signup) */
+            .actions {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+    
+            .actions a {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 10px 15px;
+                background-color: white;
+                color: #004d40;
+                border: 2px solid #004d40;
+                border-radius: 25px;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: bold;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+    
+            .actions a:hover {
+                background-color: #004d40;
+                color: white;
+            }
+    
+            /* Icons */
+            .cart {
+                font-size: 18px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Easy Pharmacy</div>
+        <nav>
+          <ul>
+            <li><a href="medicine.html">Buy Medicines</a></li>
+            <li><a href="doctor page.html">Find Doctors</a></li>
+            <li><a href="lab test.html">Lab Tests</a></li>
+            <li><a href="health records.html">Health Records</a></li>
+            <li><a href="blog.html">Health Blog</a></li>
+          </ul>
+        </nav>
+        <div class="actions">
+          <a href="cart.html" class="cart">🛒</a>
+          <span id="userGreeting" style="color: white; font-weight: bold; margin-right: 10px;"></span>
+          <a href="sing up-1.html" id="loginBtn" class="login">Login <span>👤</span></a>
+          <img id="userProfileImage" src="" alt="Profile" style="display: none; width: 32px; height: 32px; border-radius: 50%;">
+          <button id="logoutBtn" style="display: none; padding: 8px 12px; border-radius: 20px; background: white; border: none; cursor: pointer; font-weight: bold;">Sign Out</button>
+        </div>
+      </header>
+      
+      <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      
+        const firebaseConfig = {
+          apiKey: "AIzaSyD1wxRNIiYZGxrfGNCjvM1jiNQn1OYSw5M",
+          authDomain: "easypharm-82073.firebaseapp.com",
+          projectId: "easypharm-82073",
+          storageBucket: "easypharm-82073.firebasestorage.app",
+          messagingSenderId: "756950425409",
+          appId: "1:756950425409:web:b91bbf6f3ed01f5eb04bc0",
+          measurementId: "G-283W9QNVJS"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+      
+        const userGreeting = document.getElementById("userGreeting");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+      
+        // Track last activity for session timeout
+        let logoutTimer;
+      
+        const startLogoutTimer = () => {
+          clearTimeout(logoutTimer);
+          logoutTimer = setTimeout(() => {
+            signOut(auth).then(() => {
+              alert("You have been logged out due to inactivity.");
+            });
+          }, 30 * 60 * 1000); // 30 minutes
+        };
+      
+        const resetTimerOnActivity = () => {
+          document.addEventListener("mousemove", startLogoutTimer);
+          document.addEventListener("keydown", startLogoutTimer);
+          document.addEventListener("click", startLogoutTimer);
+        };
+         
+        onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    const match = email.replace(/[^a-zA-Z].*$/, "");
+
+    userGreeting.textContent = `Hi, ${match}`;
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+
+    // 👇 New code for profile image
+    const profileImg = document.getElementById("userProfileImage");
+    if (user.photoURL) {
+      profileImg.src = user.photoURL;
+      profileImg.style.display = "inline-block";
+    }
+
+    startLogoutTimer();
+    resetTimerOnActivity();
+  } else {
+    userGreeting.textContent = "";
+    loginBtn.style.display = "flex";
+    logoutBtn.style.display = "none";
+
+    const profileImg = document.getElementById("userProfileImage");
+    profileImg.style.display = "none";
+    clearTimeout(logoutTimer);
+  }
+});
+        logoutBtn.addEventListener("click", () => {
+          signOut(auth);
+        });
+      </script>
+    <style>
+
+        /* Title */
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar (Filters) */
+        .filters {
+            width: 20%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filters h2, .filters h3 {
+            margin-bottom: 10px;
+        }
+
+        .filters label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Grid Layout for Tests */
+        .grid-container {
+            width: 75%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-left: 20px;
+        }
+
+        /* Test Cards */
+        .test-card {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .test-card:hover {
+            transform: scale(1.05);
+        }
+
+        .test-card img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .strike {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .discount {
+            color: green;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function filterTests() {
+            let checkboxes = document.querySelectorAll('.filters input[type="checkbox"]');
+            let testCards = document.querySelectorAll('.test-card');
+            let activeFilters = [];
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    activeFilters.push(checkbox.getAttribute('data-filter'));
+                }
+            });
+
+            testCards.forEach(card => {
+                let testCategory = card.getAttribute('data-category');
+                if (activeFilters.length === 0 || activeFilters.includes(testCategory)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1 class="title"></h1>
+    <div class="container">
+        <aside class="filters">
+            <h2>Filters</h2>
+            <h3>Type of Tests</h3>
+            <label><input type="checkbox" data-filter="Top Deals" onchange="filterTests()"> Top Deals</label>
+
+            <h3>Must Have Tests</h3>
+            <label><input type="checkbox" data-filter="CBC" onchange="filterTests()"> CBC Test (Complete Blood Count)</label>
+            <label><input type="checkbox" data-filter="PPBS" onchange="filterTests()"> PPBS Test (Post-Prandial Blood Sugar)</label>
+            <label><input type="checkbox" data-filter="Urine Routine" onchange="filterTests()"> Urine Routine Test</label>
+            <label><input type="checkbox" data-filter="Thyroid" onchange="filterTests()"> Thyroid Profile (T3 T4 TSH) Test</label>
+            <label><input type="checkbox" data-filter="Lipid" onchange="filterTests()"> Lipid Profile Test</label>
+        </aside>
+
+        <div class="grid-container">
+            <div class="test-card" data-category="CBC">
+                <h3>Easypharm Cancer Checkup Essential Male</h3>
+                <p>63 Tests Included</p>
+                <p class="price">₹4165 <span class="strike">₹3124</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+
+            <div class="test-card" data-category="CBC">
+                <h3>Easypharm Cancer Checkup Essential Female</h3>
+                <p>37 Tests Included</p>
+                <p class="price">₹₹3124 <span class="strike">₹₹4165</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+
+            <div class="test-card" data-category="CBC">
+                <h3>Easypharm Cancer Checkup Ultra Male</h3>
+                <p>52 Tests Included</p>
+                <p class="price">₹9998<span class="strike">₹7499</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+
+            <div class="test-card" data-category="Lipid">
+                <h3>CA 19.9 Test</h3>
+                <p>1 Tests Included</p>
+                <p class="price">₹2845 <span class="strike">₹2134</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+
+            <div class="test-card" data-category="Lipid">
+                <h3>CA 15.3</h3>
+                <p>1 Tests Included</p>
+                <p class="price">₹2845 <span class="strike">₹2134</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+
+            <div class="test-card" data-category="Urine Routine">
+                <h3>Free Prostatic Specific Antigen (FPSA)- Serum</h3>
+                <p>Test(s) Included (3)</p>
+                <p class="price">₹1983 <span class="strike">₹1487</span> <span class="discount">25% off</span></p>
+                <button class="add-btn", onclick="showCartMessage()">Add</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showCartMessage() {
+       
+            let messageDiv = document.createElement("div");
+            messageDiv.innerText = "Lab Test added successfully";
+            
+            
+            messageDiv.style.position = "fixed";
+            messageDiv.style.top = "20px";
+            messageDiv.style.right = "20px";
+            messageDiv.style.background = "green";
+            messageDiv.style.color = "white";
+            messageDiv.style.padding = "10px 20px";
+            messageDiv.style.borderRadius = "5px";
+            messageDiv.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.2)";
+            messageDiv.style.fontSize = "16px";
+            messageDiv.style.zIndex = "1000";
+            
+           
+            document.body.appendChild(messageDiv);
+         
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 2000);
+         }
+        </script>
+</body>
+</html>
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact us.html">Partner with Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Our Services</h4>
+            <ul>
+                <li><a href="medicine.html">Order Medicine</a></li>
+                <li><a href="health care page.html">Healthcare Products</a></li>
+                <li><a href="lab test.html">Lab Tests</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Featured Categories</h4>
+            <ul>
+                <li><a href="Must Haves product page.html">Must Haves</a></li>
+                <li><a href="health care page.html">Heart Care</a></li>
+                <li><a href="diabetic care.html">Diabetic Care</a></li>
+                <li><a href="sexuall wellness.html">Sexual Wellness</a></li>
+                <li><a href="sports nurition.html">Sports Nutrition</a></li>
+                <li><a href="Elderly Care.html">Elderly Care</a></li>
+                <li><a href="personal care.html">Personal Care</a></li>
+                <li><a href="Health Food and Drinks.html">Health Food and Drinks</a></li>
+                <li><a href="mother page.html">Mother and Baby Care</a></li>
+                <li><a href="vitamins page.html">Vitamins & Supplements</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Need Help</h4>
+            <ul>
+                <li><a href="medicine.html">Browse All Medicines</a></li>
+                <li><a href="doctor page.html">Browse All Doctors</a></li>
+                <li><a href="nearby pharmacy.html">Browse All Cities</a></li>
+                <li><a href="nearby pharmacy.html">Browse All Stores</a></li>
+                <li><a href="FQ'S.html">FAQs</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Policy Info</h4>
+            <ul>
+                <li><a href="privacy policy.html">Privacy Policy</a></li>
+                <li><a href="terms and conditions.html">Terms and Conditions</a></li>
+                <li><a href="contact us.html">Customer Support Policy</a></li>
+                <li><a href="privacy policy.html">Return Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-section payment-partners">
+            <h4>Our Payment Partners</h4>
+            <img src="gapy.png" alt="Google Pay">
+            <img src="paytm.png" alt="Paytm">
+            <img src="phone pe.png" alt="PhonePe">
+            <img src="eppo pay.png" alt="Eppo Pay">
+        </div>
+    </div>
+</footer>
+
+<!-- CSS Styles -->
+<style>
+
+    .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width:2000px;
+        margin: auto;
+        gap:30px;
+    }
+    .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin: 10px;
+    }
+    .footer-section h4 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+    .footer-section ul li {
+        margin-bottom: 8px;
+    }
+    .footer-section ul li a {
+        text-decoration: none;
+        color: #333;
+    }
+    .social-icons img, .payment-partners img {
+        width: 50px;
+        margin-right: 10px;
+    }
+    </style>

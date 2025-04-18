@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easypharm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+          /* General Styles */
+          body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+    
+            /* Header Styles */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #004d40;
+                padding: 15px 20px;
+                color: white;
+            }
+    
+            /* Logo */
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+            }
+    
+            /* Navigation Styles */
+            nav ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+            }
+    
+            nav ul li {
+                margin: 0 15px;
+            }
+    
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+            }
+    
+            /* Actions (Cart, Login, Signup) */
+            .actions {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+    
+            .actions a {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 10px 15px;
+                background-color: white;
+                color: #004d40;
+                border: 2px solid #004d40;
+                border-radius: 25px;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: bold;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+    
+            .actions a:hover {
+                background-color: #004d40;
+                color: white;
+            }
+    
+            /* Icons */
+            .cart {
+                font-size: 18px;
+            }
+        /* Search Section */
+        .search-section {
+            background-image: url('serchbar-2.png');
+            background-size: cover;
+            background-position: center;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            padding: 100px;
+        }
+
+        .search-box {
+            width: 50%;
+            max-width: 600px;
+            background: white;
+            padding: 10px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        /* Healthcare Services */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .service-card {
+            display: flex;
+            align-items: center;
+            background-color: #e5f9f6;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            width: 250px;
+            text-decoration: none;
+            color: black;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+            justify-content: start;
+        }
+
+        .service-card:hover {
+            transform: scale(1.05);
+        }
+
+        .service-card img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .service-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Easy Pharmacy</div>
+        <nav>
+          <ul>
+            <li><a href="medicine.html">Buy Medicines</a></li>
+            <li><a href="doctor page.html">Find Doctors</a></li>
+            <li><a href="lab test.html">Lab Tests</a></li>
+            <li><a href="health records.html">Health Records</a></li>
+            <li><a href="blog.html">Health Blog</a></li>
+          </ul>
+        </nav>
+        <div class="actions">
+          <a href="cart.html" class="cart">🛒</a>
+          <span id="userGreeting" style="color: white; font-weight: bold; margin-right: 10px;"></span>
+          <a href="sing up-1.html" id="loginBtn" class="login">Login <span>👤</span></a>
+          <img id="userProfileImage" src="" alt="Profile" style="display: none; width: 32px; height: 32px; border-radius: 50%;">
+          <button id="logoutBtn" style="display: none; padding: 8px 12px; border-radius: 20px; background: white; border: none; cursor: pointer; font-weight: bold;">Sign Out</button>
+        </div>
+      </header>
+      
+      <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      
+        const firebaseConfig = {
+          apiKey: "AIzaSyD1wxRNIiYZGxrfGNCjvM1jiNQn1OYSw5M",
+          authDomain: "easypharm-82073.firebaseapp.com",
+          projectId: "easypharm-82073",
+          storageBucket: "easypharm-82073.firebasestorage.app",
+          messagingSenderId: "756950425409",
+          appId: "1:756950425409:web:b91bbf6f3ed01f5eb04bc0",
+          measurementId: "G-283W9QNVJS"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+      
+        const userGreeting = document.getElementById("userGreeting");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+      
+        // Track last activity for session timeout
+        let logoutTimer;
+      
+        const startLogoutTimer = () => {
+          clearTimeout(logoutTimer);
+          logoutTimer = setTimeout(() => {
+            signOut(auth).then(() => {
+              alert("You have been logged out due to inactivity.");
+            });
+          }, 30 * 60 * 1000); // 30 minutes
+        };
+      
+        const resetTimerOnActivity = () => {
+          document.addEventListener("mousemove", startLogoutTimer);
+          document.addEventListener("keydown", startLogoutTimer);
+          document.addEventListener("click", startLogoutTimer);
+        };
+         
+        onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    const match = email.replace(/[^a-zA-Z].*$/, "");
+
+    userGreeting.textContent = `Hi, ${match}`;
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+
+    // 👇 New code for profile image
+    const profileImg = document.getElementById("userProfileImage");
+    if (user.photoURL) {
+      profileImg.src = user.photoURL;
+      profileImg.style.display = "inline-block";
+    }
+
+    startLogoutTimer();
+    resetTimerOnActivity();
+  } else {
+    userGreeting.textContent = "";
+    loginBtn.style.display = "flex";
+    logoutBtn.style.display = "none";
+
+    const profileImg = document.getElementById("userProfileImage");
+    profileImg.style.display = "none";
+    clearTimeout(logoutTimer);
+  }
+});
+        logoutBtn.addEventListener("click", () => {
+          signOut(auth);
+        });
+      </script>
+      
+      <title>Doctor Listing - EasyPharm</title>
+  <style>
+    
+    .search-bar {
+      text-align: center;
+      margin-bottom: 30px;
+      margin: 40px auto 0 auto; /* top: 100px, auto for left/right */
+    }
+
+    .search-bar input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+    }
+
+    .search-bar button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      background-color: #0056b3;
+    }
+
+    .doctor-card {
+      display: flex;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 800px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .doctor-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .doc-photo {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+      object-fit: cover;
+    }
+
+    .doc-info h3 {
+      margin: 0;
+      font-size: 20px;
+      color: #2c3e50;
+    }
+
+    .doc-info p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .consult-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .consult-btn:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search for a doctor by name ">
+  <button onclick="searchDoctor()">Search</button>
+</div>
+
+<div id="doctorList">
+  <div class="doctor-card">
+    <img src="https://images.apollo247.in/doctors/98139a0f-71cc-48ed-b52a-abeb1e641185-1729509608044.png?tr=w-150,c-at_max,f-auto,q=80,dpr-2" alt="Doctor Photo" class="doc-photo">
+    <div class="doc-info">
+      <h3>Dr. Kesha Nayak</h3>
+      <p>MBBS, MD (Paediatrics)</p>
+      <p><strong>6 YEARS</strong></p>
+      <p>Chennai</p>
+      <p>₹1800</p>
+      <button class="consult-btn" onclick="bookAppointment('Dr. Samarth Acharya')">Consult Online</button>
+    </div>
+  </div>
+
+  <div class="doctor-card">
+    <img src="https://images.apollo247.in/doctors/9695822f-7e7c-4acd-88e7-ae945eb6aa4d-1713935701655.png?tr=w-150,c-at_max,f-auto,q=80,dpr-2" alt="Doctor Photo" class="doc-photo">
+    <div class="doc-info">
+      <h3>Dr. Thejaswini Peddakotla</h3>
+      <p> MBBS, MD Paediatrics</p>
+      <p><strong>13+ YEARS</strong></p>
+      <p>chennai</p>
+      <p>₹1000</p>
+      <button class="consult-btn" onclick="bookAppointment('Dr. Sumanta Chatterjee')">Consult Online</button>
+    </div>
+  </div>
+
+  <div class="doctor-card">
+    <img src="https://images.apollo247.in/doctors/6a4d15e3-5971-4efa-85b2-730d8b36c297-1723715783948.png?tr=w-150,c-at_max,f-auto,q=80,dpr-2" alt="Doctor Photo" class="doc-photo">
+    <div class="doc-info">
+      <h3>Dr. Revathy S</h3>
+      <p>MBBS, MD (Paediatrics)</p>
+      <p><strong>13 YEARS</strong></p>
+      <p>Hyderabad - Easypharm Medical Center</p>
+      <p>₹500</p>
+      <button class="consult-btn" onclick="bookAppointment('Dr A Sai Ravi Shanker')">Consult Online</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function bookAppointment(doctorName) {
+    window.location.href = `doctor appoimtent.html?doctor=${encodeURIComponent(doctorName)}`;
+  }
+
+  function searchDoctor() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const doctorCards = document.querySelectorAll('.doctor-card');
+    doctorCards.forEach(card => {
+      const name = card.querySelector('h3').innerText.toLowerCase();
+      const specialty = card.querySelector('p').innerText.toLowerCase();
+      if (name.includes(query) || specialty.includes(query)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+    <!-- Footer Section -->
+<footer class="footer">
+  <div class="footer-container">
+      <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact us.html">Partner with Us</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+          <h4>Our Services</h4>
+          <ul>
+              <li><a href="medicine.html">Order Medicine</a></li>
+              <li><a href="health care page.html">Healthcare Products</a></li>
+              <li><a href="lab test.html">Lab Tests</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+          <h4>Featured Categories</h4>
+          <ul>
+              <li><a href="Must Haves product page.html">Must Haves</a></li>
+              <li><a href="health care page.html">Heart Care</a></li>
+              <li><a href="diabetic care.html">Diabetic Care</a></li>
+              <li><a href="sexuall wellness.html">Sexual Wellness</a></li>
+              <li><a href="sports nurition.html">Sports Nutrition</a></li>
+              <li><a href="Elderly Care.html">Elderly Care</a></li>
+              <li><a href="personal care.html">Personal Care</a></li>
+              <li><a href="Health Food and Drinks.html">Health Food and Drinks</a></li>
+              <li><a href="mother page.html">Mother and Baby Care</a></li>
+              <li><a href="vitamins page.html">Vitamins & Supplements</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+          <h4>Need Help</h4>
+          <ul>
+              <li><a href="medicine.html">Browse All Medicines</a></li>
+              <li><a href="doctor page.html">Browse All Doctors</a></li>
+              <li><a href="nearby pharmacy.html">Browse All Cities</a></li>
+              <li><a href="nearby pharmacy.html">Browse All Stores</a></li>
+              <li><a href="FQ'S.html">FAQs</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+          <h4>Policy Info</h4>
+          <ul>
+              <li><a href="privacy policy.html">Privacy Policy</a></li>
+              <li><a href="terms and conditions.html">Terms and Conditions</a></li>
+              <li><a href="contact us.html">Customer Support Policy</a></li>
+              <li><a href="privacy policy.html">Return Policy</a></li>
+          </ul>
+      </div>
+</footer>
+
+<!-- CSS Styles -->
+<style>
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 2000px;
+    margin: 100px auto 0 auto; /* top: 100px, auto for left/right */
+    gap: 30px;
+}
+
+  .footer-section {
+      flex: 1;
+      min-width: 200px;
+      margin: 10px;
+  }
+  .footer-section h4 {
+      font-size: 16px;
+      font-weight: bold;
+  }
+  .footer-section ul {
+      list-style: none;
+      padding: 0;
+  }
+  .footer-section ul li {
+      margin-bottom: 8px;
+  }
+  .footer-section ul li a {
+      text-decoration: none;
+      color: #333;
+  }
+  </style>
+    </body>
+    <!-- Chatbot Button -->
+<button class="chat-toggle" onclick="toggleChat()">
+  <img src="chatbot img.png" alt="Chatbot">
+</button>
+
+<!--Chat bot-->
+<title>Pharmacy Chatbot</title>
+<style>
+   body {
+       font-family: Arial, sans-serif;
+   }
+
+   .chatbot-container {
+       position: fixed;
+       bottom: 100px;
+       right: 20px;
+       width: 300px;
+       display: none;
+       border-radius: 10px;
+       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+       background: white;
+       overflow: hidden;
+   }
+
+   .chat-header {
+       background: #007bff;
+       color: white;
+       padding: 10px;
+       text-align: center;
+       font-weight: bold;
+   }
+
+   .chat-body {
+       height: 300px;
+       overflow-y: auto;
+       padding: 10px;
+   }
+
+   .chat-input {
+       display: flex;
+       border-top: 1px solid #ccc;
+   }
+
+   .chat-input input {
+       flex: 1;
+       padding: 10px;
+       border: none;
+       outline: none;
+   }
+
+   .chat-input button {
+       padding: 10px;
+       border: none;
+       background: #007bff;
+       color: white;
+       cursor: pointer;
+   }
+
+   .chat-toggle {
+       position: fixed;
+       bottom: 100px;
+       right: 90px;
+       background: transparent;
+       border: none;
+       cursor: pointer;
+   }
+
+   .chat-toggle img {
+       width: 60px;
+       height: 60px;
+       border-radius: 50%;
+   }
+</style>
+</head>
+
+<body>
+   <button class="chat-toggle" onclick="toggleChat()">
+       <img src="chatbot img.png" alt="Chatbot">
+   </button>
+   <div class="chatbot-container" id="chatbot">
+       <div class="chat-header">Pharmacy Chatbot</div>
+       <div class="chat-body" id="chat-body"></div>
+       <div class="chat-input">
+           <input type="text" id="user-input" placeholder="Ask me anything...">
+           <button onclick="sendMessage()">Send</button>
+       </div>
+   </div>
+
+   <script>
+       function toggleChat() {
+           var chatbot = document.getElementById('chatbot');
+           chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+       }
+
+       function sendMessage() {
+           var inputField = document.getElementById('user-input');
+           var userText = inputField.value;
+           if (!userText.trim()) return;
+
+           var chatBody = document.getElementById('chat-body');
+           chatBody.innerHTML += `<div><strong>You:</strong> ${userText}</div>`;
+           inputField.value = '';
+           setTimeout(() => respondToUser(userText.toLowerCase()), 1000);
+       }
+
+       function respondToUser(question) {
+question = question.toLowerCase();
+
+var responses = {
+// Basic Greetings & Services
+"hi": "Hello! This is Jira from Easy Pharmacy. How can I help you?",
+"what are your pharmacy hours": "We are open from 9 AM to 9 PM every day.",
+"do you deliver medicines": "Yes, we offer home delivery services.",
+"how can i contact customer support": "You can call us at +91-1234567890.",
+"can you help in ordering medicines": "Yes, just select your medicine category, add to cart, and proceed to payment.",
+"can i upload a prescription": "Yes, upload your prescription on our website and we’ll process your order.",
+"do you offer discounts": "Yes, we offer discounts on selected medicines and health services.",
+"can i track my order": "Yes, once placed, your order tracking details will be sent via WhatsApp or email.",
+
+// Doctor & Lab Services
+"how can i book a doctor appointment": "You can book an appointment from the 'Doctor Appointment' section on our website.",
+"can i book appointment with doctor": "Yes, we have specialized doctors. Book a slot through our appointment section.",
+"do you offer lab tests": "Yes, we provide lab test services including blood and urine tests.",
+"what types of lab tests do you provide": "We provide blood tests, thyroid, diabetes, urine tests and many more diagnostics.",
+
+// Website Navigation
+"show the medicine page": "<a href='/medicine'>Click here to visit the medicine page</a>",
+"take me to medicine page": "<a href='/medicine'>Click here to visit the medicine page</a>",
+"show the blog page": "<a href='/blog'>Click here to visit the blog page</a>",
+"take me to health blog page": "<a href='/blog'>Click here to visit the blog page</a>",
+
+// Medicine Usage
+"what is azithromycin used for": "Azithromycin is used to treat bacterial infections like respiratory and skin infections.",
+"what is amoxicillin used for": "Amoxicillin treats bacterial infections such as dental issues, throat, and chest infections.",
+"what is metformin used for": "Metformin is used to control blood sugar in patients with type 2 diabetes.",
+"what is pantoprazole used for": "Pantoprazole treats acid reflux, indigestion, and stomach ulcers.",
+"what is montelukast used for": "Montelukast is used for asthma, wheezing, and allergy-related breathing problems.",
+"what is cetirizine used for": "Cetirizine relieves allergy symptoms like sneezing, runny nose, and itchy eyes.",
+"what is paracetamol used for": "Paracetamol reduces fever and mild to moderate pain like headaches or body pain.",
+"what is neurobion used for": "Neurobion is a vitamin supplement used for nerve pain and B12 deficiency.",
+"what is dolo 650 used for": "Dolo 650 is used to reduce fever and relieve mild to moderate pain.",
+
+// Side Effects & Dosage
+"does paracetamol have side effects": "Paracetamol is safe in recommended doses. Overuse can damage the liver.",
+"side effects of azithromycin": "Common side effects include nausea, stomach pain, and diarrhea.",
+"can i take metformin and paracetamol together": "Yes, generally safe. But confirm with your doctor before combining medicines.",
+"can i take dolo 650 daily": "It should be used short-term unless prescribed for regular use by your doctor.",
+"how many times should i take amoxicillin": "Typically 2-3 times a day, depending on infection. Follow your doctor's advice.",
+"when should i take vitamin d": "Best taken in the morning with food for better absorption.",
+"how long can i take pan 40": "Usually taken for 4–8 weeks. Use long-term only under medical supervision.",
+
+// Health & Wellness
+"do you have painkillers": "Yes, we stock a variety of painkillers like Dolo 650, Ibuprofen, and Combiflam.",
+"do you sell ayurvedic medicines": "Yes, we offer ayurvedic medicines under our Herbal & Ayurveda section.",
+"do you have blood pressure monitors": "Yes, we sell digital BP monitors and other health devices.",
+"can you suggest medicine for fever": "Dolo 650 or Crocin are common, but it's better to consult a doctor.",
+
+// Baby & Women's Health
+"do you have baby care products": "Yes! We have baby powder, diapers, soaps, lotions and more.",
+"what medicine is good for baby fever": "Calpol Drops are commonly used. Always consult a pediatrician first.",
+"do you sell pregnancy test kits": "Yes, available under personal care section.",
+};
+
+var chatBody = document.getElementById('chat-body');
+      var response = responses[question] || "Sorry, I didn't understand. Please try another question.";
+      chatBody.innerHTML += `<div><strong>Bot:</strong> ${response}</div>`;
+  }
+ </script>
+</body>
+    </html>
+    

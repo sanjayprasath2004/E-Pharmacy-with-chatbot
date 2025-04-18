@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 70%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    button {
+      padding: 7px 15px;
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkred;
+    }
+    .input-container {
+      margin-bottom: 20px;
+    }
+    input, select {
+      padding: 8px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel</h2>
+
+  <h3>Add a Medicine</h3>
+  <div class="input-container">
+    <label for="medicine-location">Choose Location:</label>
+    <select id="medicine-location">
+      <option value="store1">Heart Care</option>
+      <option value="store2">Diabetic Care</option>
+      <option value="store3">Sports Nutrition</option>
+      <option value="store4">Personal Care</option>
+      <option value="store5">Health Food and Drinks</option>
+      <option value="store6">Mother and Baby Care</option>
+      <option value="store7">Vitamins and Supplements</option>
+      <option value="store8">Ayurvedic Care</option>
+      <option value="store9">Healthcare Devices</option>
+    </select>
+    <br><br>
+
+    <input type="text" id="medicine-name" placeholder="Enter Medicine Name">
+    <input type="number" id="medicine-price" placeholder="Enter Price">
+    <input type="number" id="medicine-quantity" placeholder="Enter Quantity">
+    <input type="text" id="medicine-image-url" placeholder="Enter Medicine Image URL">
+    <br><br>
+    <button id="add-btn">Add Medicine</button>
+  </div>
+
+  <h3>Available Medicines</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Medicine Name</th>
+        <th>Price (₹)</th>
+        <th>Quantity</th>
+        <th>Location</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="medicine-table-body">
+      <tr><td colspan="6"></td></tr>
+    </tbody>
+  </table>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD1wxRNIiYZGxrfGNCjvM1jiNQn1OYSw5M",
+      authDomain: "easypharm-82073.firebaseapp.com",
+      projectId: "easypharm-82073",
+      storageBucket: "easypharm-82073.appspot.com",
+      messagingSenderId: "756950425409",
+      appId: "1:756950425409:web:b91bbf6f3ed01f5eb04bc0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadMedicines() {
+      const tableBody = document.getElementById("medicine-table-body");
+      tableBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "medicines"));
+        tableBody.innerHTML = "";
+
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = "<tr><td colspan='6'>No medicines available</td></tr>";
+        } else {
+          querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const { name, price, quantity, imageUrl, location } = data;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td><img src="${imageUrl}" alt="${name}"></td>
+              <td>${name}</td>
+              <td>₹${price}</td>
+              <td>${quantity}</td>
+              <td>${location}</td>
+              <td><button class="delete-btn" data-id="${docSnap.id}">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+          });
+
+          document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", async () => {
+              const id = button.getAttribute("data-id");
+              await deleteDoc(doc(db, "medicines", id));
+              alert("Medicine Deleted");
+              loadMedicines();
+            });
+          });
+        }
+      } catch (error) {
+        console.error("Error loading medicines:", error);
+        tableBody.innerHTML = "<tr><td colspan='6'>Error loading medicines</td></tr>";
+      }
+    }
+
+    async function addMedicine() {
+      const name = document.getElementById("medicine-name").value.trim();
+      const price = document.getElementById("medicine-price").value;
+      const quantity = document.getElementById("medicine-quantity").value;
+      const imageUrl = document.getElementById("medicine-image-url").value.trim();
+      const location = document.getElementById("medicine-location").value;
+
+      function isValidImageUrl(url) {
+        return /\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i.test(url);
+      }
+
+      if (!name || !price || !quantity || !imageUrl || !location) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      if (!isValidImageUrl(imageUrl)) {
+        alert("Please enter a valid image URL ending in .jpg, .png, etc.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "medicines"), {
+          name,
+          price: parseFloat(price),
+          quantity: parseInt(quantity),
+          imageUrl,
+          location
+        });
+
+        alert("Medicine added!");
+        document.getElementById("medicine-name").value = "";
+        document.getElementById("medicine-price").value = "";
+        document.getElementById("medicine-quantity").value = "";
+        document.getElementById("medicine-image-url").value = "";
+
+        loadMedicines();
+      } catch (error) {
+        console.error("Error adding medicine:", error.message, error);
+        alert("Failed to add medicine. Check console.");
+     }
+    }
+
+    document.getElementById("add-btn").addEventListener("click", addMedicine);
+    window.addEventListener("DOMContentLoaded", loadMedicines);
+  </script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easypharm - Bones and Joint Health Lab Tests</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles (from heart lab test.html) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Header Styles (from heart lab test.html) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #004d40;
+            padding: 15px 20px;
+            color: white;
+        }
+
+        /* Logo (from heart lab test.html) */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation Styles (from heart lab test.html) */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Actions (Cart, Login, Signup) (from heart lab test.html) */
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .actions a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            background-color: white;
+            color: #004d40;
+            border: 2px solid #004d40;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .actions a:hover {
+            background-color: #004d40;
+            color: white;
+        }
+
+        /* Icons (from heart lab test.html) */
+        .cart {
+            font-size: 18px;
+        }
+
+        /* Container for lab tests (similar to covid-19 test.html and heart lab test.html) */
+        .labTestsContainer {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .lab-test {
+            padding: 15px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lab-test-details {
+            flex-grow: 1;
+        }
+
+        .cart-button {
+            background-color: #388e3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .cart-button:hover {
+            background-color: #1b5e20;
+        }
+
+        /* Filters (Hidden) */
+        .filters {
+            display: none;
+        }
+
+        /* Package Grid (Arrange one by one) */
+        .package-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .package-card {
+            background: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .package-details {
+            flex-grow: 1;
+        }
+
+        .package-card h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .package-card p {
+            font-size: 14px;
+            color: gray;
+            margin: 5px 0;
+        }
+
+        .price {
+            font-size: 18px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .add-button-package {
+            background: #388e3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .add-button-package:hover {
+            background-color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Easy Pharmacy</div>
+        <nav>
+            <ul>
+                <li><a href="medicine.html">Buy Medicines</a></li>
+                <li><a href="doctor page.html">Find Doctors</a></li>
+                <li><a href="lab test.html">Lab Tests</a></li>
+                <li><a href="health records.html">Health Records</a></li>
+                <li><a href="blog.html">Health Blog</a></li>
+            </ul>
+        </nav>
+        <div class="actions">
+            <a href="lab test  view.html" class="cart">🛒</a>
+            <span id="userGreeting" style="color: white; font-weight: bold; margin-right: 10px;"></span>
+            <a href="sing up-1.html" id="loginBtn" class="login">Login <span>👤</span></a>
+            <img id="userProfileImage" src="" alt="Profile" style="display: none; width: 32px; height: 32px; border-radius: 50%;">
+            <button id="logoutBtn" style="display: none; padding: 8px 12px; border-radius: 20px; background: white; border: none; cursor: pointer; font-weight: bold;">Sign Out</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="filters">
+            <h3>Filters</h3>
+            <h4>Bones and Joint Health Test Types</h4>
+            <label><input type="checkbox" class="filter-checkbox" data-test="Calcium"> Calcium Test</label>
+            <label><input type="checkbox" class="filter-checkbox" data-test="Vitamin D"> Vitamin D Test</label>
+            <label><input type="checkbox" class="filter-checkbox" data-test="Uric Acid"> Uric Acid Test</label>
+            <label><input type="checkbox" class="filter-checkbox" data-test="RA Factor"> Rheumatoid Factor (RA) Test</label>
+        </div>
+
+        <div class="labTestsContainer">
+            <h2>Bones and Joint Health Lab Test Packages</h2>
+            <div class="package-grid">
+                <div class="package-card">
+                    <div class="package-details">
+                        <h4>Comprehensive Bone & Joint Health Panel</h4>
+                        <p>Includes Calcium, Vitamin D, Uric Acid, and RA Factor Tests</p>
+                        <p class="price">₹2200 <del>₹2700</del> (19% off)</p>
+                    </div>
+                    <button class="add-button-package" onclick="addToCart('bonejoint1', 'Comprehensive Bone & Joint Health Panel', 2200)">Add to Cart</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-details">
+                        <h4>Calcium & Vitamin D Test</h4>
+                        <p>Essential Tests for Bone Strength</p>
+                        <p class="price">₹1200 <del>₹1500</del> (20% off)</p>
+                    </div>
+                    <button class="add-button-package" onclick="addToCart('bonejoint2', 'Calcium & Vitamin D Test', 1200)">Add to Cart</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-details">
+                        <h4>Arthritis & Joint Health Test</h4>
+                        <p>Assess Uric Acid Levels and RA Factor</p>
+                        <p class="price">₹1500 <del>₹1800</del> (17% off)</p>
+                    </div>
+                    <button class="add-button-package" onclick="addToCart('bonejoint3', 'Arthritis & Joint Health Test', 1500)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1wxRNIiYZGxrfGNCjvM1jiNQn1OYSw5M",
+            authDomain: "easypharm-82073.firebaseapp.com",
+            projectId: "easypharm-82073",
+            storageBucket: "easypharm-82073.firebasestorage.app",
+            messagingSenderId: "756950425409",
+            appId: "1:756950425409:web:b91bbf6f3ed01f5eb04bc0",
+            measurementId: "G-283W9QNVJS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const userGreeting = document.getElementById("userGreeting");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        // Track last activity for session timeout
+        let logoutTimer;
+
+        const startLogoutTimer = () => {
+            clearTimeout(logoutTimer);
+            logoutTimer = setTimeout(() => {
+                signOut(auth).then(() => {
+                    alert("You have been logged out due to inactivity.");
+                });
+            }, 30 * 60 * 1000); // 30 minutes
+        };
+
+        const resetTimerOnActivity = () => {
+            document.addEventListener("mousemove", startLogoutTimer);
+            document.addEventListener("keydown", startLogoutTimer);
+            document.addEventListener("click", startLogoutTimer);
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                const email = user.email;
+                const match = email.replace(/[^a-zA-Z].*$/, "");
+
+                userGreeting.textContent = `Hi, ${match}`;
+                loginBtn.style.display = "none";
+                logoutBtn.style.display = "inline-block";
+
+                // 👇 New code for profile image
+                const profileImg = document.getElementById("userProfileImage");
+                if (user.photoURL) {
+                    profileImg.src = user.photoURL;
+                    profileImg.style.display = "inline-block";
+                }
+
+                startLogoutTimer();
+                resetTimerOnActivity();
+            } else {
+                userGreeting.textContent = "";
+                loginBtn.style.display = "flex";
+                logoutBtn.style.display = "none";
+
+                const profileImg = document.getElementById("userProfileImage");
+                profileImg.style.display = "none";
+                clearTimeout(logoutTimer);
+            }
+        });
+        logoutBtn.addEventListener("click", () => {
+            signOut(auth);
+        });
+    </script>
+
+    <script>
+        function addToCart(id, name, price) {
+            let cart = JSON.parse(localStorage.getItem('labCart')) || [];
+            const existing = cart.find(item => item.id === id);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+
+            localStorage.setItem('labCart', JSON.stringify(cart));
+            alert(`${name} added to cart`);
+        }
+
+        // Remove filter functionality from display
+        const filtersDiv = document.querySelector('.filters');
+        if (filtersDiv) {
+            filtersDiv.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
